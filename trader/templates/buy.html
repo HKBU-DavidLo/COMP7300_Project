@@ -1,0 +1,9 @@
+{% extends "base.html" %}
+{% block content %}
+    <h1>Hi {{ username }}</h1>
+
+    <h3>Symbol: {{ symbol }}</h3>
+
+    <div class="alert alert-success">Stock details table here</div>
+    <a class="btn btn-warning" href="{% url 'buy-order' %}">buy this stock</a>
+{% endblock %}

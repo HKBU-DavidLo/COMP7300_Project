@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{% block content %}
+    <h1 class="my-2">Hi {{ username }}</h1>
+
+    <h3>Symbol: {{ symbol }}</h3>
+    <p>Quote: ${{ quote }}</p>
+    <p>Number of shares to buy: </p>
+    <p>Strategy Selected: ###</p>
+    <p>Strategy Details:</p>
+    <div class="alert alert-success">Strategy Information</div>
+    <p>AI prediction:</p>
+    <div class="alert alert-success">AI Prediction</div>
+    <a class="btn btn-danger" href="#">Confirm</a>
+    <a class="btn btn-dark" href="{% url 'dashboard' %}">Cancel</a>
+{% endblock %}

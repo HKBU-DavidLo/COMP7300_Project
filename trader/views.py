@@ -1,7 +1,26 @@
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404, redirect
+import datetime
+from django.http import HttpResponseRedirect
+from django.urls import reverse
+from .forms import BuyShareForm
+from django.contrib.auth import authenticate
+from django.contrib.auth.decorators import login_required
 
 def index(request):
-    return render(request, 'index.html')
+    if request.user.is_authenticated:
+        return HttpResponseRedirect(reverse('dashboard'))
+    else:
+        return render(request, 'index.html')
+
+def signup(request):
+    pass
+
+def orderpreview(request):
+    pass
+
+def signout(request):
+    pass
+            
 
 def buy(request):
     username = 'Username'

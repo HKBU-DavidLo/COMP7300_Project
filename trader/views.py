@@ -1,10 +1,17 @@
 from django.shortcuts import render, get_object_or_404, redirect
 import datetime
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, HttpResponse
 from django.urls import reverse
 from .forms import BuyShareForm
 from django.contrib.auth import authenticate
 from django.contrib.auth.decorators import login_required
+from .models import Cash, StockHoldings
+from django.template import loader
+from django.shortcuts import render
+import finnhub
+
+# Setup client
+finnhub_client = finnhub.Client(api_key="c0p7jnn48v6rvej4esog")
 
 def index(request):
     if request.user.is_authenticated:
@@ -43,10 +50,22 @@ def buyorder(request):
     return render(request, 'buy-order.html', context)
 
 def dashboard(request):
-    act_fund = 12410
-    username = 'Username'
+    cash = Cash.objects.get(user=request.user)
+    username = request.user
+    stocks = StockHoldings.objects.filter(user=request.user)
+    stocks_update = []
+    stock_update = {}
+    for stock in stocks:
+        stock_update = {
+            'symbol': stock.symbol,
+            'quantity': stock.quantity,
+            'avg_purchase_price': stock.avg_purchase_price
+        }
+        stock_update['current'] = finnhub_client.quote(stock.symbol)['c']
+        stocks_update.append(stock_update)
     context = {
         'username': username,
-        'act_fund': act_fund,
+        'cash': cash.cash,
+        'stocks': stocks_update,
     }
     return render(request, 'dashboard.html', context)

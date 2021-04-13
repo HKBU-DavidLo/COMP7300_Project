@@ -31,3 +31,13 @@ class Transaction(models.Model):
     fee = models.FloatField(verbose_name="transaction fee", null=True)
     tax = models.FloatField(verbose_name="tax levied", null=True)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
+
+class Cash(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    cash = models.FloatField()
+
+class StockHoldings(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    quantity = models.IntegerField()
+    avg_purchase_price = models.FloatField()
+    symbol = models.CharField(max_length=10)

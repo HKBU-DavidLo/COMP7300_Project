@@ -40,7 +40,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'trader.apps.TraderConfig',
     'users.apps.UsersConfig',
-    #'crispy_forms',
+    'crispy_forms',
 ]
 
 MIDDLEWARE = [

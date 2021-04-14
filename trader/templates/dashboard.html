@@ -154,30 +154,36 @@
         </div>
     </aside>
     <article>
+
         <div class="wrapper">
             <div class="content">
                 <h1>Your Trading Dashboard</h1>
-                <h4>Your Fund: $<em>XXXX</em></h4>
+                <h4>Cash balance: $<em>{{cash}}</em></h4>
+                <p>{{username}}</p>
                 <h1>Your Stock Portfolio:</h1>
                 <table>
                     <thead>
                         <td>Symbol</td>
                         <td>#Shares</td>
+                        <td>#Avg Purchase Price ($)</td>
                         <td>Mkt Value ($)</td>
+                        <td>Profit / Loss</td>
                     </thead>
+                    {% if stocks %}                     
+                        {% for stock in stocks %}
+                        <tr>
+                            <td>{{ stock.symbol }}</td>
+                            <td>{{ stock.quantity }}</td>
+                            <td>${{ stock.avg_purchase_price }}</td>
+                            <td>${{ stock.current }}</td>
+                        </tr>
+                        {% endfor %}
+                    {% else %}
+                        <p>No polls are available.</p>
+                    {% endif %}
                     <tr>
-                        <td>XXX</td>
-                        <td>XXX</td>
-                        <td>XXX</td>
-                    </tr>
-                    <tr>
-                        <td>XXX</td>
-                        <td>XXX</td>
-                        <td>XXX</td>
-                    </tr>
-                    <tr>
-                        <td colspan="2"><strong>Total</strong></td>
-                        <td>XXXX</td>
+                        <td colspan="4"><strong>Total</strong></td>
+                        <td id="total_stock_value">XXXX</td>
                     </tr>
                 </table>
             </div>

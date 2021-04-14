@@ -1,5 +1,7 @@
 from django.db import models
+from django.db.models import UniqueConstraint
 from django.contrib.auth.models import User
+from django.utils import timezone
 import datetime
 # Create your models here.
 
@@ -13,9 +15,19 @@ class Stock(models.Model):
     long_position_after = models.IntegerField(default=0)
     short_position_before = models.IntegerField(default=0)
     short_position_after = models.IntegerField(default=0)
-    created = models.DateField()
-    updated = models.DateField()
+    created = models.DateTimeField(editable=False)
+    updated = models.DateTimeField()
     user = models.ForeignKey(User, on_delete=models.CASCADE)
+
+    def save(self, *args, **kwargs):
+        if not self.id:
+            self.created = timezone.now()
+        self.updated = timezone.now()
+        return super(Stock, self).save(*args, **kwargs)
+
+    class Meta:
+        # ensure one user can own same stock once
+        UniqueConstraint(fields=['symbol', 'user'], name='unique_holding')
 
 
 class Transaction(models.Model):

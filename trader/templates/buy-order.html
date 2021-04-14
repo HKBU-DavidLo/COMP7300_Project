@@ -1,15 +1,45 @@
 {% extends "base.html" %}
 {% block content %}
-    <h1 class="my-2">Hi {{ username }}</h1>
-
-    <h3>Symbol: {{ symbol }}</h3>
-    <p>Quote: ${{ quote }}</p>
-    <p>Number of shares to buy: </p>
-    <p>Strategy Selected: ###</p>
-    <p>Strategy Details:</p>
-    <div class="alert alert-success">Strategy Information</div>
-    <p>AI prediction:</p>
-    <div class="alert alert-success">AI Prediction</div>
-    <a class="btn btn-danger" href="#">Confirm</a>
-    <a class="btn btn-dark" href="{% url 'dashboard' %}">Cancel</a>
+    <h5 class="my-2">Hi, {{ user.get_username }}</h5>
+    <form action="{% url 'order-preview' %}" method="post">
+        {% csrf_token %}
+        <label>{{ form.stock.label_tag }}</label>
+        <select id="stock_sel" name="{{ form.stock.name }}">
+            {% for choice in form.stock.field.choices %}
+                <option value="{{ choice.0 }}">{{ choice.1 }}</option>
+            {% endfor %}
+        </select>
+        <div id="price"></div>
+        <p>
+            {{ form.quantity.label_tag }}
+            {{ form.quantity }}
+        </p>
+        <p>
+            {{ form.limit_price.label_tag }}
+            {{ form.limit_price }}
+        </p>
+        <button class="btn btn-danger" type="submit">Buy</button>
+    </form>
+    <script>
+        $("#stock_sel").prop("selectedIndex", -1)
+        $("#stock_sel").change(async function () {
+            let symbol = $("#stock_sel option:selected").val()
+            $.ajax({
+                url: "{% url 'getquote' %}",
+                data: {
+                    'symbol': symbol
+                },
+                dataType: 'json',
+                success: function (data) {
+                    $("#price").text("Real time price: US$" + data.c.toString())
+                }
+            })
+            // let response = await fetch("https://finnhub.io/api/v1/quote?symbol="+symbol+"&token=c0n56cv48v6v1q0c1peg")
+            // if (response.ok) {
+            //     let data = await response.json()
+            //     $("#price").text("Real time price: US$" + data.c.toString())
+            // }
+            //$("#price").text(response)
+        })
+    </script>
 {% endblock %}

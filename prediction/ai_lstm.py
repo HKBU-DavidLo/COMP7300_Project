@@ -4,11 +4,21 @@ import numpy as np
 import datetime as dt 
 import pandas as pd 
 from sklearn.preprocessing import MinMaxScaler 
+<<<<<<< HEAD
 from  tensorflow.keras.models import Sequential 
 from tensorflow.keras.layers import Dense, Dropout, LSTM 
 import matplotlib.pyplot as plt 
 
 
+=======
+from  keras.models import Sequential 
+from keras.layers import Dense, Dropout, LSTM 
+import matplotlib.pyplot as plt 
+
+
+import os 
+os.environ['TF_CPP_MIN_LOG_LEVEL'] = '2'
+>>>>>>> b0a0eca7193014d6c0d2b37983213dd1dd1c0957
 
 #get the stock quote
 company = 'AAPL'

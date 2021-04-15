@@ -1,8 +1,82 @@
-{% extends "users/base.html" %} {% block content %}
-<h2>You have been logged out</h2>
-<div class="border-top pt-3">
-  <small class="text-muted">
-    <a href="{% url 'login' %}">Log In Again</a>
-  </small>
-</div>
-{% endblock content %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fintech Project Web-App</title>
+    <style>
+        body {
+            margin-top: 130px;
+            font-family: Arial, Helvetica, sans-serif;
+        }
+        h1 {
+            color: red;
+            font-weight: 700;
+        }
+        .form-div {
+            min-width: 420px;
+            width: 30%;
+            margin: auto;
+            padding: 30px 18px;
+        }
+        .signin-btn{
+            display: block;
+            margin-left: auto;
+            width: auto;
+            padding: 8px 12px;
+            background-color: #085cef;
+            color: white;
+        }
+        input[type=text], input[type=password] {
+            width: 100%;
+            padding: 12px 20px;
+            margin: 10px 0;
+            display: inline-block;
+            border: 1px solid #ccc;
+            box-sizing: border-box
+        }
+        a:link {
+            text-decoration: none;
+            
+            color: black;
+        }
+        a:hover {
+            text-decoration: underline;
+            font-weight: bold;
+        }
+        button:hover {
+            cursor: pointer;
+        }
+
+    </style>
+</head>
+<body>
+    
+    <div class="form-div">
+        <h6 style="color: lightslategray;">You've logged out from the app.</h4>
+        <form action="{% url 'login' %}" method="post">
+            {% csrf_token %}
+            <h1>Sign In</h2>
+            <p>Don't have an account? <a href="{% url 'signup' %}">Sign up now</a>.</p>
+            
+            <label for="username"><b>Username</b></label>
+            <input type="text" placeholder="Enter Username" name="username" required>
+
+            <label for="password"><b>Password</b></label>
+            <input type="password" placeholder="Enter Password" name="password" required>
+
+            <p>By signing in, you declare you agree to our terms of use and privacy policy.</p>
+            <label>
+                <input type="checkbox" name="remember">Remember me
+            </label>
+            <button class="signin-btn" type="submit">Sign in</button>
+            <input type="hidden" name="next" value="{% url 'dashboard' %}">
+        </form>
+        <a href="#">Forgot password?</a>
+    </div>
+
+    
+</body>
+</html>

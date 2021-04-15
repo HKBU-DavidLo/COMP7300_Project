@@ -176,14 +176,15 @@
                             <td>{{ stock.quantity }}</td>
                             <td>${{ stock.avg_purchase_price }}</td>
                             <td>${{ stock.current }}</td>
+                            <td>${{ stock.profit_loss }}</td>
                         </tr>
                         {% endfor %}
                     {% else %}
-                        <p>No polls are available.</p>
+                        <p>You do not have any stock holding.</p>
                     {% endif %}
                     <tr>
                         <td colspan="4"><strong>Total</strong></td>
-                        <td id="total_stock_value">XXXX</td>
+                        <td id="total_stock_value">{{total_pl}}</td>
                     </tr>
                 </table>
             </div>

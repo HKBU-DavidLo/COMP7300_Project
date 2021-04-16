@@ -126,6 +126,6 @@ STATIC_URL = '/static/'
 
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
 
-LOGIN_REDIRECT_URL = 'register'  # NEED TO UPDATE TO HOMEPAGE LATER!!
+LOGIN_REDIRECT_URL = 'home-page'
 
 LOGIN_URL = 'login'

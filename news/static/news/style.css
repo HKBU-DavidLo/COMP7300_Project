@@ -1,0 +1,19 @@
+.card {
+  height: 470px; /* Your height here */
+  overflow: hidden;
+}
+
+.card-image {
+  height: 200px; /* Your height here */
+  overflow: hidden;
+}
+
+.card-content {
+  height: 220px; /* Your height here */
+  text-overflow: ellipsis;
+  overflow: hidden;
+}
+
+.card-action {
+  height: 50px; /* Your height here */
+}

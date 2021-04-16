@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'trader.apps.TraderConfig',
     'users.apps.UsersConfig',
+    'news.apps.NewsConfig',
     'crispy_forms',
 ]
 

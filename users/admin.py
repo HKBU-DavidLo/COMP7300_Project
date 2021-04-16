@@ -13,4 +13,9 @@ class ProfileAdmin(admin.ModelAdmin):
     list_display = ['user', 'fund', 'email', 'mobile']
 
 
-admin.site.register(Code)
+# admin.site.register(Code)
+
+
+@admin.register(Code)
+class ProfileAdmin(admin.ModelAdmin):
+    list_display = ['user', 'number']

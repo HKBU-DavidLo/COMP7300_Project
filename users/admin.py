@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Profile
+from .models import Profile, Code
 from django.contrib.auth.admin import UserAdmin
 from django.contrib.auth.models import User
 
@@ -11,3 +11,6 @@ from django.contrib.auth.models import User
 @admin.register(Profile)
 class ProfileAdmin(admin.ModelAdmin):
     list_display = ['user', 'fund', 'email', 'mobile']
+
+
+admin.site.register(Code)

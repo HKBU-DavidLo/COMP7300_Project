@@ -2,6 +2,7 @@ from django import forms
 from django.contrib.auth.models import User
 from .models import Profile
 from django.contrib.auth.forms import UserCreationForm
+from .models import Code
 
 
 class UserRegisterForm (UserCreationForm):
@@ -20,3 +21,12 @@ class UserUpdateForm(forms.ModelForm):
     class Meta:
         model = Profile
         fields = ['email', 'mobile']
+
+
+class CodeForm(forms.ModelForm):
+    number = forms.CharField(
+        label='Code', help_text='Enter SMS verification code')
+
+    class Meta:
+        model = Code
+        fields = ('number',)

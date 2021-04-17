@@ -1,0 +1,40 @@
+{% extends 'news/base.html' %} {% block content %} {% if name %}
+<ul class="collection with-header">
+  <li class="collection-header">
+    <h3>
+      {{ name }}
+      <img src="{{ logo }}" alt="{{ name }}" width="50" height="50" />
+    </h3>
+  </li>
+  <li class="collection-item"><b>Exchange: </b>{{ exchange }}</li>
+  <li class="collection-item"><b>Market Cap: </b>{{ marketCapitalization }}</li>
+  <li class="collection-item">
+    <b>Share Outstanding: </b>{{ shareOutstanding }}
+  </li>
+  <li class="collection-item">
+    <b>Website: </b><a href="{{ weburl }}" target="_blank">{{ weburl }}</a>
+  </li>
+</ul>
+
+<div class="row">
+  {% for post in final_postings %}
+  <div class="col s4">
+    <div class="card">
+      <div class="card-image">
+        <img src="{{ post.2 }}" alt="" />
+      </div>
+      <div class="card-content">
+        <span class="card-title">{{ post.0 }}</span>
+        <p>{{ post.1 }} (HKT)</p>
+        <p>{{ post.4 }}</p>
+      </div>
+
+      <div class="card-action">
+        <a href="{{ post.5 }}" target="_blank">View details</a>
+      </div>
+    </div>
+  </div>
+  {% endfor %} {% else %}
+  <p style="text-align: left">{{ search }} is not a valid ticker</p>
+</div>
+{%endif%} {% endblock content %}

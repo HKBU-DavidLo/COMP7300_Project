@@ -12,8 +12,8 @@ import matplotlib.pyplot as plt
 #get the stock quote
 company = 'AAPL'
 #display data 
-start= dt.datetime(2020,4,4)
-end= dt.datetime(2021,4,6)
+start = dt.datetime(2021,1,1) 
+end= dt.datetime.now()
 data=web.DataReader('AAPL','yahoo',start,end)
 
 scaler = MinMaxScaler(feature_range=(0,1))
@@ -48,7 +48,7 @@ model.fit(x_train, y_train, epochs=25, batch_size=32)
 '''Test The Model Accuracy on Existing Data '''
 
 # Load Test Data 
-test_start = dt.datetime(2020,1,1) 
+test_start = dt.datetime(2021,1,1) 
 test_end = dt.datetime.now()
 
 test_data = web.DataReader(company, 'yahoo', test_start, test_end) 

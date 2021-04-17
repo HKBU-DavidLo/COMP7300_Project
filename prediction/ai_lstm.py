@@ -15,7 +15,7 @@ company = var1
 #display data 
 start = dt.datetime(2021,1,1) 
 end= dt.datetime.now()
-data=web.DataReader('AAPL','yahoo',start,end)
+data=web.DataReader(var1,'yahoo',start,end)
 
 scaler = MinMaxScaler(feature_range=(0,1))
 scaled_data= scaler.fit_transform(data['Close'].values.reshape(-1,1))

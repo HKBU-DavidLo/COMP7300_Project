@@ -58,12 +58,15 @@ def new_search(request):
     # models.Search.objects.create(search=search)
     return render(request, 'news/new_search.html', stuff_for_frontend)
 
-import subprocess
+import subprocess 
 
 def prediction(request):
-    predictstock= request.POST.get('predictstock')
-    if request.method == 'POST':
-        {'predictstock': predictstock}
-        subprocess.check_call(['python3', './prediction/ai_lstm.py',predictstock]) 
+    try:
+        predictstock= request.POST.get('predictstock')
+        if request.method == 'POST':
+            {'predictstock': predictstock}
+            subprocess.check_call(['python3', './prediction/ai_lstm.py',predictstock])
          # nb lowercase 'python'
-    return render(request, 'news/base.html')
+        return render(request, 'news/base.html')
+    except subprocess.CalledProcessError:
+        print("empty symbol")

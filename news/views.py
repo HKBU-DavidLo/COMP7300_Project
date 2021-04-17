@@ -62,5 +62,6 @@ import subprocess
 
 def prediction(request):
     if request.method == 'POST':
-        subprocess.check_call(['python3', './prediction/ai_lstm.py'])  # nb lowercase 'python'
-   
+        subprocess.check_call(['python3', './prediction/ai_lstm.py']) 
+         # nb lowercase 'python'
+    return render(request, 'news/base.html')

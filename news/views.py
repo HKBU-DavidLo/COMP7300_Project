@@ -4,6 +4,7 @@ from requests.compat import quote_plus
 from . import models
 from datetime import datetime, timezone, date, timedelta
 import pytz
+from flask import Flask, render_template, request, redirect
 
 
 def home(request):
@@ -57,3 +58,10 @@ def new_search(request):
 
     # models.Search.objects.create(search=search)
     return render(request, 'news/new_search.html', stuff_for_frontend)
+
+import subprocess
+
+def prediction(request):
+    if request.method == 'POST':
+        subprocess.check_call(['python3', './prediction/ai_lstm.py'])  # nb lowercase 'python'
+    return redirect(request,'news/prediction.html')

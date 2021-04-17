@@ -125,4 +125,7 @@
       }
     </script>
   </body>
+  <form action='{% url "prediction" %}' method="POST"> {% csrf_token %}
+    <input value="Executer" type="submit">prediction
+  </form>
 </html>

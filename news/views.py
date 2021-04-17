@@ -61,7 +61,9 @@ def new_search(request):
 import subprocess
 
 def prediction(request):
+    predictstock= request.POST.get('predictstock')
     if request.method == 'POST':
-        subprocess.check_call(['python3', './prediction/ai_lstm.py']) 
+        {'predictstock': predictstock}
+        subprocess.check_call(['python3', './prediction/ai_lstm.py',predictstock]) 
          # nb lowercase 'python'
     return render(request, 'news/base.html')

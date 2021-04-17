@@ -7,10 +7,11 @@ from sklearn.preprocessing import MinMaxScaler
 from  tensorflow.keras.models import Sequential 
 from tensorflow.keras.layers import Dense, Dropout, LSTM 
 import matplotlib.pyplot as plt 
-
+import sys
+var1 = sys.argv[1]
 
 #get the stock quote
-company = 'AAPL'
+company = var1
 #display data 
 start = dt.datetime(2021,1,1) 
 end= dt.datetime.now()

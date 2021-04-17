@@ -97,17 +97,28 @@
           Search
           <i class="material-icons right">send</i>
         </button>
+        <h4>Stock Prediction</h4>
       </form>
       <form action='{% url "prediction" %}' method="POST"> {% csrf_token %}
         <datalist id="symbols"></datalist>
+        <input
+          class="input"
+          type="text"
+          name="predictstock"
+          placeholder="Stock Symbol, e.g. AAPL"
+          oninput="findSymbol(this.value)"
+          list="symbols"
+          id="input"
+          autocomplete="off"
+        />
         <button
           class="btn waves-effect waves-light"
           type="submit"
           name="action"
-          onclick="return changeText('submitbutton');"
+          onclick="myFunction();"
         >
-       Price Prediction<i class="material-icons right">send</i>
-      </button> 
+        
+       <div id="buttonname">Price Prediction<i class="material-icons right">send</i></div>
       </form>
       {% block content%} {% endblock %}
     </div>
@@ -134,11 +145,14 @@
         }
       }
 
-      function changeText(submitId){
-        var submit = document.getElementById(submitId);
-        submit.value = 'Loading...';
-        return false;
-    };
+      function myFunction() {
+  var x = document.getElementById("buttonname");
+  if (x.innerHTML === "Price Prediction") {
+    x.innerHTML = "Loading";
+  } else {
+    x.innerHTML = "Price Prediction";
+  }
+}
     </script>
   </body>
 </html>

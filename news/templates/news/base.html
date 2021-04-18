@@ -23,7 +23,9 @@
         <ul id="nav-mobile" class="right hide-on-med-and-down">
           {% if user.is_authenticated %}
           <li>
-            <a class="nav-item nav-link" href="{% url 'profile' %}">Profile</a>
+            <a class="nav-item nav-link" href="{% url 'profile' %}"
+              >{{user.username}}</a
+            >
           </li>
           <li>
             <a class="nav-item nav-link" href="{% url 'logout' %}">Logout</a>
@@ -99,7 +101,8 @@
         </button>
         <h4>Stock Prediction</h4>
       </form>
-      <form action='{% url "prediction" %}' method="POST"> {% csrf_token %}
+      <form action='{% url "prediction" %}' method="POST">
+        {% csrf_token %}
         <datalist id="symbols"></datalist>
         <input
           class="input"
@@ -117,8 +120,10 @@
           name="action"
           onclick="myFunction();"
         >
-        
-       <div id="buttonname">Price Prediction<i class="material-icons right">send</i></div>
+          <div id="buttonname">
+            Price Prediction<i class="material-icons right">send</i>
+          </div>
+        </button>
       </form>
       {% block content%} {% endblock %}
     </div>
@@ -146,9 +151,9 @@
       }
 
       function myFunction() {
-  var x = document.getElementById("buttonname");
-    x.innerHTML = "Loading...Please wait";
-}
+        var x = document.getElementById("buttonname");
+        x.innerHTML = "Loading...Please wait";
+      }
     </script>
   </body>
 </html>

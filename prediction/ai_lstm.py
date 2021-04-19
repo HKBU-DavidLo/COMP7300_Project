@@ -4,7 +4,7 @@ import numpy as np
 import datetime as dt 
 import pandas as pd 
 from sklearn.preprocessing import MinMaxScaler 
-from  tensorflow.keras.models import Sequential 
+from  tensorflow.keras import Sequential 
 from tensorflow.keras.layers import Dense, Dropout, LSTM 
 import matplotlib.pyplot as plt 
 import sys

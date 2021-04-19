@@ -130,28 +130,10 @@
       </form>
 >>>>>>> 08cbc4ad6d382d02e0120560dd23ee8704fb57af
       {% block content%} {% endblock %}
-    </div>
-    <form action='{% url "prediction" %}' method="POST"> {% csrf_token %}
-      <datalist id="symbols"></datalist>
-      <input
-        class="input"
-        type="text"
-        name="predictstock"
-        placeholder="Stock Symbol, e.g. AAPL"
-        oninput="findSymbol(this.value)"
-        list="symbols"
-        id="input"
-        autocomplete="off"
-      />
-      <button
-        class="btn waves-effect waves-light"
-        type="submit"
-        name="action"
-        onclick="myFunction();"
-      >
-      
-     <div id="buttonname">Price Prediction<i class="material-icons right">send</i></div>
+    
     </form>
+    <div id="result">
+    </div>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
 
     <script>
@@ -179,6 +161,10 @@
         var x = document.getElementById("buttonname");
         x.innerHTML = "Loading...Please wait";
       }
+      
+    $("#buttonname").click(function(){
+     $("#result").load("");
+    })
     </script>
   </body>
 </html>

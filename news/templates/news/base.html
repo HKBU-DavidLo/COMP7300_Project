@@ -23,7 +23,9 @@
         <ul id="nav-mobile" class="right hide-on-med-and-down">
           {% if user.is_authenticated %}
           <li>
-            <a class="nav-item nav-link" href="{% url 'profile' %}">Profile</a>
+            <a class="nav-item nav-link" href="{% url 'profile' %}"
+              >{{user.username}}</a
+            >
           </li>
           <li>
             <a class="nav-item nav-link" href="{% url 'logout' %}">Logout</a>
@@ -99,7 +101,34 @@
         </button>
         <h4>Stock Prediction</h4>
       </form>
+<<<<<<< HEAD
   
+=======
+      <form action='{% url "prediction" %}' method="POST">
+        {% csrf_token %}
+        <datalist id="symbols"></datalist>
+        <input
+          class="input"
+          type="text"
+          name="predictstock"
+          placeholder="Stock Symbol, e.g. AAPL"
+          oninput="findSymbol(this.value)"
+          list="symbols"
+          id="input"
+          autocomplete="off"
+        />
+        <button
+          class="btn waves-effect waves-light"
+          type="submit"
+          name="action"
+          onclick="myFunction();"
+        >
+          <div id="buttonname">
+            Price Prediction<i class="material-icons right">send</i>
+          </div>
+        </button>
+      </form>
+>>>>>>> 08cbc4ad6d382d02e0120560dd23ee8704fb57af
       {% block content%} {% endblock %}
     </div>
     <form action='{% url "prediction" %}' method="POST"> {% csrf_token %}
@@ -147,9 +176,9 @@
       }
 
       function myFunction() {
-  var x = document.getElementById("buttonname");
-    x.innerHTML = "Loading...Please wait";
-}
+        var x = document.getElementById("buttonname");
+        x.innerHTML = "Loading...Please wait";
+      }
     </script>
   </body>
 </html>

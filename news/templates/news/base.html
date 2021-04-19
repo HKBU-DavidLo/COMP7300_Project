@@ -101,9 +101,7 @@
         </button>
         <h4>Stock Prediction</h4>
       </form>
-<<<<<<< HEAD
-  
-=======
+
       <form action='{% url "prediction" %}' method="POST">
         {% csrf_token %}
         <datalist id="symbols"></datalist>
@@ -128,9 +126,8 @@
           </div>
         </button>
       </form>
->>>>>>> 08cbc4ad6d382d02e0120560dd23ee8704fb57af
       {% block content%} {% endblock %}
-    
+      <p style="text-align: left"> {{ predictstock }} - Prediction Price : {{ lastpprice }} </p>
     </form>
     <div id="result">
     </div>

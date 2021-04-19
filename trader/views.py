@@ -9,6 +9,7 @@ from django.contrib.auth.decorators import login_required
 import requests
 import datetime
 import logging
+from .models import Cash
 from django.template import loader
 from django.shortcuts import render
 import finnhub

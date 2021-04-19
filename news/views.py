@@ -63,10 +63,14 @@ import subprocess
 def prediction(request):
     try:
         predictstock= request.POST.get('predictstock')
-        if request.method == 'POST':
-            {'predictstock': predictstock}
-            subprocess.check_call(['python3', './prediction/ai_lstm.py',predictstock])
+        if predictstock == "":
+            predictstock = "AAPL"
+            return render(request, 'news/base.html')
+        else:
+            if request.method == 'POST':
+             {'predictstock': predictstock}
+             subprocess.check_call(['python3', './prediction/ai_lstm.py',predictstock])
          # nb lowercase 'python'
-        return render(request, 'news/base.html')
+            return render(request, 'news/base.html')
     except subprocess.CalledProcessError:
         print("empty symbol")

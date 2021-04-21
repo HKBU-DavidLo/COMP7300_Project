@@ -7,7 +7,7 @@ class BuyShareForm(forms.Form):
     SHARE_CHOICES = [
         ('AAPL', 'Apple (AAPL)'),
         ('GOOG', 'Google (GOOG)'),
-        ('BUD', 'AB InBev (YHOO)'),
+        ('BUD', 'AB InBev (ABI)'),
         ('AMZN', 'Amazon (AMZN)'),
         ('BTI', 'BA Tobacco (BTI)'),
         ('ET', 'Energy Transfer (ET)'),

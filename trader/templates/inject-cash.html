@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+{% block content %}
+    <h5 class="my-2">Hi, {{ user.get_username }}, your current account balance is ${{ cash }}.</h5>
+    <p>Please enter the amount of cash to you want to deposit:</p>
+    <form action="{% url 'deposit-preview' %}" method="POST">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Submit</button>
+    </form>
+{% endblock %}

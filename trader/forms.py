@@ -19,3 +19,7 @@ class BuyShareForm(forms.Form):
     tx_time = forms.DateField(widget=forms.HiddenInput(), required=False)
 
     ## cleasing functions to be written
+
+class DepositCashForm(forms.Form):
+    cash = forms.FloatField(label='Amount of cash to be deposited')
+    tx_time = forms.DateField(widget=forms.HiddenInput(), required=False)

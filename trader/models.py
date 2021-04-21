@@ -44,10 +44,28 @@ class Transaction(models.Model):
     tax = models.FloatField(verbose_name="tax levied", null=True)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
 
-
 class Cash(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    cash = models.FloatField()
+    cash = models.FloatField(default=0)
+    updated = models.DateTimeField(blank=True, null=True)
+
+    def save(self, *args, **kwargs):
+        #if not self.id:
+        #    self.created = timezone.now()
+        self.updated = timezone.now()
+        return super(Cash, self).save(*args, **kwargs)
 
     def __float__(self):
         return self.cash
+
+class CashTX(models.Model):
+    TX_TYPE = (
+        ('d', 'deposit'),
+        ('w', 'withdraw'),
+    )
+    tx_type = models.CharField(max_length=1, choices=TX_TYPE)
+    cash_before = models.FloatField(default=0.0)
+    cash_after = models.FloatField(default=0.0)
+    amount = models.FloatField(verbose_name="amount")
+    tx_time = models.DateField(verbose_name="transction time")
+    user = models.ForeignKey(User, on_delete=models.CASCADE)

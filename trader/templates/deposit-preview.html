@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+    <h1>Preview Your Instruction</h1>
+    <form method="post" action="{% url 'confirm-deposit' %}">
+        {% csrf_token %}
+        {{ form.cash.label_tag }}
+        <input id="cash_amt" type="text" name="{{ form.cash.name }}" value="{{ form.cash.value }}" readonly>
+        
+        <p id="tx_time">current time: </p>
+        <button class="btn btn-danger" type="submit">Confirm</button>
+        <a class="btn btn-light" href="{% url 'deposit-cash' %}">Cancel</a>
+    </form>
+    <script>
+        $("#tx_time").append(function () {
+            js_time = new Date()
+            return js_time.getTime() / 1000
+        })
+    </script>
+{% endblock %}

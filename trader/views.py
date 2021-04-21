@@ -91,7 +91,7 @@ def dashboard(request):
     for stock in stocks:
         stock_update = {
             'symbol': stock.symbol,
-            'quantity': stock.bought_quantity,
+            'quantity': stock.long_position_after,
             'avg_purchase_price': stock.bought_unit_price
         }
         mkt_price = finnhub_client.quote(stock.symbol)['c']
@@ -122,6 +122,10 @@ def confirmbuy(request):
             price = form.cleaned_data['limit_price']
             fee = quantity * price * 0.005 # assume 0.5% commission for the moment
             tax = 0.0 # assume no tax for the moment
+            cash_required = quantity * price + fee
+            cash_obj = get_object_or_404(Cash, user=request.user)
+            cash_obj.cash -= cash_required
+            
             try:
                 stock_obj = Stock.objects.get(user=request.user, symbol=form.cleaned_data['stock'])
                 stock_obj.bought_quantity = quantity
@@ -131,6 +135,7 @@ def confirmbuy(request):
                 stock_obj.long_position_after = position_before + quantity
                 stock_obj.bought_unit_price = (position_before * old_unit_price + quantity * price) / stock_obj.long_position_after
                 stock_obj.save()
+                cash_obj.save()
                 
             except Stock.DoesNotExist:
                 stock_obj = Stock(
@@ -141,9 +146,10 @@ def confirmbuy(request):
                     long_position_after=quantity,
                 )
                 stock_obj.save()
+                cash_obj.save()
             tx_object = Transaction(
                 tx_type='b',
-                stock=stock_obj,
+                symbol=form.cleaned_data['stock'],
                 quantity=quantity,
                 unit_price=price,
                 fee=fee, 

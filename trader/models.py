@@ -36,7 +36,8 @@ class Transaction(models.Model):
         ('s', 'sell'),
     )
     tx_type = models.CharField(max_length=1, choices=TX_TYPE, verbose_name="transaction type")
-    stock = models.OneToOneField(Stock, on_delete=models.DO_NOTHING)
+    #stock = models.OneToOneField(Stock, on_delete=models.DO_NOTHING)
+    symbol = models.CharField(max_length=10)
     quantity = models.IntegerField()
     unit_price = models.FloatField()
     tx_time = models.DateField(verbose_name="transction time")

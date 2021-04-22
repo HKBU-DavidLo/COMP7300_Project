@@ -36,7 +36,7 @@ def buy(request):
     context = {
         'page_title': page_title,
         'form': form,
-        'action': 'buyorder-preview'
+        'action': 'buyorder-preview',
     }
     return render(request, 'share-order.html', context)
 
@@ -119,6 +119,7 @@ def buyorderpreview(request):
                 context = {
                     'form': form,
                     'page_title': 'Insufficient Fund',
+                    'action': 'buyorder-preview',
                     'error_msg': "You don't have enough cash, please deposit and try again!",
                 }
                 return render(request, 'share-order.html', context)

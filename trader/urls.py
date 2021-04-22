@@ -16,5 +16,7 @@ urlpatterns = [
     path('deposit-cash/', views.depositcash, name='deposit-cash'),
     path('withdraw-cash/', views.withdrawcash, name='withdraw-cash'),
     path('deposit-preview/', views.depositpreview, name='deposit-preview'),
+    path('withdraw-preview/', views.withdrawpreview, name='withdraw-preview'),
     path('confirm-deposit/', views.confirmdeposit, name='confirm-deposit'),
+    path('confirm-withdraw/', views.confirmwithdraw, name='confirm-withdraw'),
 ]

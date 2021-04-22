@@ -1,8 +1,9 @@
 {% extends "base.html" %}
 {% block content %}
-    <h5 class="my-2">Hi, {{ user.get_username }}</h5>
-    <h5 class="my-2" style="color:red;">{{ error_msg }}</h5>
-    <form action="{% url 'order-preview' %}" method="post">
+    <h4 class="m-4">Hi, {{ user.get_username }}</h4>
+    <h5 class="m-4">Please Fill in the {{ page_title }}</h5>
+    <h5 class="m-4" style="color:red;">{{ error_msg }}</h5>
+    <form class="m-4" action="{% url action %}" method="post">
         {% csrf_token %}
         <label>{{ form.stock.label_tag }}</label>
         <select id="stock_sel" name="{{ form.stock.name }}">
@@ -19,7 +20,7 @@
             {{ form.limit_price.label_tag }}
             {{ form.limit_price }}
         </p>
-        <button class="btn btn-danger" type="submit">Buy</button>
+        <button class="btn btn-danger" type="submit">Preview</button>
     </form>
     <script>
         $("#stock_sel").prop("selectedIndex", -1)

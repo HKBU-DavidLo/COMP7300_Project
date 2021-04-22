@@ -24,7 +24,7 @@ class Stock(models.Model):
             self.created = timezone.now()
         self.updated = timezone.now()
         return super(Stock, self).save(*args, **kwargs)
-
+        
     class Meta:
         # ensure one user can own same stock once
         UniqueConstraint(fields=['symbol', 'user'], name='unique_holding')

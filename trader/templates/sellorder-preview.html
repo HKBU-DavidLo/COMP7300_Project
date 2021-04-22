@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+    <h1>Preview Your Order</h1>
+    <form method="post" action="{% url 'confirm-sell' %}">
+        {% csrf_token %}
+        {{ form.stock.label_tag }}
+        <input id="stock_sel" type="text" name="{{ form.stock.name }}" value="{{ form.stock.value }}" readonly>
+        <p>
+            {{ form.quantity.label_tag }}
+            <input type="text" name="{{ form.quantity.name }}" value="{{ form.quantity.value }}" readonly>
+        </p>
+        <p>
+            {{ form.limit_price.label_tag }}
+            <input type="text" name="{{ form.limit_price.name }}" value="{{ form.limit_price.value }}" readonly>
+        </p>
+        <p id="tx_time">current time: </p>
+        <button class="btn btn-danger" type="submit">Sell</button>
+        <a class="btn btn-light" href="{% url 'sell' %}">Cancel</a>
+    </form>
+    <script>
+        $("#tx_time").append(function () {
+            js_time = new Date()
+            return js_time.getTime() / 1000
+        })
+    </script>
+{% endblock %}

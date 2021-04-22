@@ -3,7 +3,7 @@ from django.core.exceptions import ValidationError
 
 from django.contrib.auth.models import User
 
-class BuyShareForm(forms.Form):
+class ShareTransactionForm(forms.Form):
     SHARE_CHOICES = [
         ('AAPL', 'Apple (AAPL)'),
         ('GOOG', 'Google (GOOG)'),

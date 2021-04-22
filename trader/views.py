@@ -2,7 +2,7 @@ from django.shortcuts import render, get_object_or_404, redirect
 from django.http import HttpResponseRedirect, JsonResponse, HttpResponse
 from django.utils.timezone import now
 from django.urls import reverse
-from .forms import BuyShareForm, DepositCashForm
+from .forms import ShareTransactionForm, DepositCashForm
 from .models import Transaction, Stock, Cash, CashTX
 from django.contrib.auth import authenticate
 from django.contrib.auth.decorators import login_required
@@ -26,21 +26,69 @@ def index(request):
 def signup(request):
     pass
 
-def orderpreview(request):
-    pass
-
 def signout(request):
     pass
             
 @login_required
 def buy(request):
-    page_title = 'Buy Form'
-    form = BuyShareForm()
+    page_title = 'Buy Share Form'
+    form = ShareTransactionForm()
     context = {
         'page_title': page_title,
         'form': form,
+        'action': 'buyorder-preview'
     }
-    return render(request, 'buy-order.html', context)
+    return render(request, 'share-order.html', context)
+
+@login_required
+def sell(request):
+    page_title = 'Sell Share Form'
+    form = ShareTransactionForm()
+    context = {
+        'page_title': page_title,
+        'form': form,
+        'action': 'sellorder-preview',
+    }
+    return render(request, 'share-order.html', context)
+
+@login_required
+def sellorderpreview(request):
+    if request.method == 'POST':
+        page_title = 'Preview Your Oder'
+        form = ShareTransactionForm(request.POST)
+        if form.is_valid():
+            symbol = form.cleaned_data['stock']
+            try:
+                stock_obj = Stock.objects.get(user=request.user, symbol=form.cleaned_data['stock'])
+                shares_owned = stock_obj.long_position_after
+                quantity = form.cleaned_data['quantity']
+                if quantity > shares_owned:
+                    error_msg = "You don't have sufficient stocks to sell, please re-try."
+                    form = ShareTransactionForm()
+                    context = {
+                        'form': form,
+                        'page_title': error_msg,
+                        'error_msg': error_msg,
+                        'action': 'sellorder-preview',
+                    }
+                    return render(request, 'share-order.html', context)
+                context = {
+                    'form': form,
+                    'page_title': page_title, 
+                }
+                return render(request, 'sellorder-preview.html', context) 
+            except Stock.DoesNotExist:
+                error_msg = "You don't own this stock, short-selling is currently not supported."
+                form = ShareTransactionForm()
+                context = {
+                    'form': form,
+                    'page_title': 'No Stock Owned',
+                    'error_msg': error_msg,
+                    'action': 'sellorder-preview',
+                }
+                return render(request, 'share-order.html', context)
+    else:
+        pass
 
 def getquote(request):
     symbol = request.GET.get('symbol', None) 
@@ -50,11 +98,10 @@ def getquote(request):
     return JsonResponse(data)
 
 @login_required
-def orderpreview(request):
+def buyorderpreview(request):
     if request.method == 'POST':
-        
         page_title = 'Preview Your Order'
-        form = BuyShareForm(request.POST)
+        form = ShareTransactionForm(request.POST)
         if form.is_valid():
             cash = float(Cash.objects.get(user=request.user))
             quantity = form.cleaned_data['quantity']
@@ -66,15 +113,15 @@ def orderpreview(request):
                     'form': form,
                     'page_title': page_title, 
                 }
-                return render(request, 'order-preview.html', context)     
+                return render(request, 'buyorder-preview.html', context)     
             else:
-                form = BuyShareForm()
+                form = ShareTransactionForm()
                 context = {
                     'form': form,
                     'page_title': 'Insufficient Fund',
                     'error_msg': "You don't have enough cash, please deposit and try again!",
                 }
-                return render(request, 'buy-order.html', context)
+                return render(request, 'share-order.html', context)
         else:
             pass
 
@@ -116,7 +163,7 @@ def dashboard(request):
 @login_required
 def confirmbuy(request):
     if request.method == 'POST':
-        form = BuyShareForm(request.POST)
+        form = ShareTransactionForm(request.POST)
         if form.is_valid():
             quantity = form.cleaned_data['quantity']
             price = form.cleaned_data['limit_price']
@@ -161,6 +208,49 @@ def confirmbuy(request):
             return HttpResponseRedirect(reverse('dashboard'))
         else:
             return render(request, 'error.html', { 'form': form })
+
+@login_required
+def confirmsell(request):
+    if request.method == "POST":
+        form = ShareTransactionForm(request.POST)
+        if form.is_valid():
+            quantity = form.cleaned_data['quantity']
+            price = form.cleaned_data['limit_price']
+            fee = quantity * price * 0.005 #assume 0.5% commission for the moment
+            tax = 0.0 # assume no tax for the moment
+            proceeds = quantity * price - fee
+            cash_obj = get_object_or_404(Cash, user=request.user)
+            cash_obj.cash += proceeds
+            try:
+                stock_obj = Stock.objects.get(user=request.user, symbol=form.cleaned_data['stock'])
+                stock_obj.sold_quantity = quantity
+                original_cost = stock_obj.long_position_after * stock_obj.bought_unit_price
+                stock_obj.long_position_before = stock_obj.long_position_after
+                stock_obj.long_position_after = stock_obj.long_position_after - quantity
+                #update the remaining shares' unit cost 
+                new_original_cost = original_cost - quantity * price
+                if new_original_cost < 0:
+                    stock_obj.bought_unit_price = 0.0
+                else:
+                    stock_obj.bought_unit_price = new_original_cost / stock_obj.long_position_after
+                stock_obj.save()
+                cash_obj.save()
+                tx_object = Transaction(
+                    tx_type='s',
+                    symbol=form.cleaned_data['stock'],
+                    quantity=quantity,
+                    unit_price=price,
+                    fee=fee,
+                    tax=tax,
+                    tx_time=stock_obj.updated,
+                    user=request.user
+                )
+                tx_object.save()
+                return HttpResponseRedirect(reverse('dashboard'))
+            except Stock.DoesNotExist:
+                return render(request, 'error.html')
+    else:
+        pass
 
 @login_required
 def depositcash(request):

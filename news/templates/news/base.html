@@ -45,39 +45,39 @@
     </nav>
 
     <div class="container">
-      <h1 style="text-align: center">Marketing Message</h1>
+      <h1 style="text-align: center">Make investment decisions easier</h1>
       <div class="row">
-        <div class="col s4">
+        <div class="col s6">
           <!-- Promo Content 1 goes here -->
           <div class="center">
-            <i class="large material-icons" style="color: #2fc43c">android</i>
-            <p>Product 1</p>
-            <p class="light center">Product 1 description</p>
+            <a href="{% url 'buy' %}" ><i class="large material-icons" style="color: #2fc43c">android</i></a>
+            <p>AI Prediction Trading</p>
+            <p class="light center">AI-powered stock trading platform</p>
           </div>
         </div>
 
-        <div class="col s4">
+        <div class="col s6">
           <!-- Promo Content 2 goes here -->
           <div class="center">
-            <i class="large material-icons" style="color: orange"
+            <a href="{% url 'dashboard' %}" ><i class="large material-icons" style="color: orange"
               >insert_chart</i
-            >
-            <p>Product 2</p>
-            <p class="light center">Product 2 description</p>
+            ></a>
+            <p>Trading Dashboard</p>
+            <p class="light center">View your stock portfolio and cash balance</p>
           </div>
         </div>
 
-        <div class="col s4">
+<!--         <div class="col s4"> -->
           <!-- Promo Content 3 goes here -->
-          <div class="center">
+<!--           <div class="center">
             <i class="large material-icons" style="color: blue">person_pin</i>
             <p>Product 3</p>
             <p class="light center">Product 3 description</p>
           </div>
-        </div>
+        </div> -->
       </div>
 
-      <h4>New Search</h4>
+      <h4>News Search</h4>
       <form action="{% url 'new_search' %}" method="POST">
         {% csrf_token %}
         <datalist id="symbols"></datalist>

@@ -2,15 +2,12 @@
 {% block content %}
     <h4 class="m-4">Hi, {{ user.get_username }}</h4>
     <h5 class="m-4">Please Fill in the {{ page_title }}</h5>
-    <h5 class="m-4" style="color:red;">{{ error_msg }}</h5>
-    <form class="m-4" action="{% url action %}" method="post">
+    <h5 class="m-4" id="error_msg" style="color:red;">{{ error_msg }}</h5>
+    <form class="m-4" action="{% url action %}" method="post" onsubmit="return validateForm()">
         {% csrf_token %}
         <label>{{ form.stock.label_tag }}</label>
-        <select id="stock_sel" name="{{ form.stock.name }}">
-            {% for choice in form.stock.field.choices %}
-                <option value="{{ choice.0 }}">{{ choice.1 }}</option>
-            {% endfor %}
-        </select>
+        <input id="stock_sel" name="{{ form.stock.name }}">
+            
         <div id="price"></div>
         <p>
             {{ form.quantity.label_tag }}
@@ -23,9 +20,9 @@
         <button class="btn btn-danger" type="submit">Preview</button>
     </form>
     <script>
-        $("#stock_sel").prop("selectedIndex", -1)
-        $("#stock_sel").change(async function () {
-            let symbol = $("#stock_sel option:selected").val()
+        //$("#stock_sel").prop("selectedIndex", -1)
+        $("#stock_sel").on("input", async function () {
+            let symbol = $("#stock_sel").val().toUpperCase()
             $.ajax({
                 url: "{% url 'getquote' %}",
                 data: {
@@ -34,6 +31,10 @@
                 dataType: 'json',
                 success: function (data) {
                     $("#price").text("Real time price: US$" + data.c.toString())
+                },
+                error: function() {
+                    $("#price").text("Price data not found!")
+                    $("#price").style.color = "red"
                 }
             })
             // let response = await fetch("https://finnhub.io/api/v1/quote?symbol="+symbol+"&token=c0n56cv48v6v1q0c1peg")
@@ -43,5 +44,23 @@
             // }
             //$("#price").text(response)
         })
+        function validateForm() {
+            let priceField = document.getElementById('price').innerHTML
+            console.log(priceField)
+            if (priceField == 'Real time price: US$0') {
+                document.getElementById("error_msg").innerHTML = "Something wrong with the stock selected"
+                return false
+            } else {
+                let currentPrice = parseFloat(priceField.split('$')[1])
+                let limitPrice = document.getElementById('id_limit_price').value
+                let upper = currentPrice * 1.1
+                let lower = currentPrice * 0.9
+                if (limitPrice > upper || limitPrice < lower) {
+                    document.getElementById("error_msg").innerHTML = "Limit price is too far from current price"
+                    return false
+                }
+                return true
+            }
+        }
     </script>
 {% endblock %}

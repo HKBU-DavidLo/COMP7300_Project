@@ -306,3 +306,28 @@ def confirmdeposit(request):
 @login_required
 def withdrawcash(request):
     pass
+
+import subprocess 
+from subprocess import Popen, PIPE
+
+def prediction(request):
+    try:
+        
+        predictstock= request.POST.get('predictstock')
+        if predictstock == "":
+            predictstock = "AAPL"
+            return render(request, 'prediction.html')
+        else:
+            if request.method == 'POST':
+             {'predictstock': predictstock}
+             #subprocess.check_call(['python3', './prediction/ai_lstm.py',predictstock])
+             process = subprocess.run(['python3', './prediction/ai_lstm.py',predictstock], check=True, stdout=subprocess.PIPE, universal_newlines=True)
+             output = process.stdout
+             words = output.split()
+             lastpprice=(words[-1])
+         # nb lowercase 'python'
+             prediction = {'predictstock': predictstock,
+                            'lastpprice': lastpprice}
+            return render(request, 'prediction.html',prediction)
+    except subprocess.CalledProcessError:
+        print("empty symbol")

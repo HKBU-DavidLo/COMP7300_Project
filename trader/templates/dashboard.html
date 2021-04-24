@@ -118,6 +118,18 @@ a.article-title:hover {
               >
             </li>
             <li>
+              <a href="{% url 'buy' %}" class="nav-item nav-link">Buy Shares</a>
+            </li>
+            <li>
+              <a href="{% url 'sell' %}" class="nav-item nav-link">Sell Shares</a>
+            </li>
+            <li>
+              <a href="{% url 'deposit-cash' %}" class="nav-item nav-link">Deposit Cash</a>
+            </li>
+            <li>
+              <a href="{% url 'withdraw-cash' %}" class="nav-item nav-link">Withdraw Cash</a>
+            </li>
+            <li>
               <a class="nav-item nav-link" href="{% url 'logout' %}">Logout</a>
             </li>
             {% else %}

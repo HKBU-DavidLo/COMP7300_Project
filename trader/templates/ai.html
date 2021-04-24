@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+{% block content %}
+
+<!--
+
+<form action='{% url "prediction" %}' method="POST" onsubmit="aiPredict()">
+    {% csrf_token %}
+-->
+    <datalist id="symbols"></datalist>
+    <input class="input" type="text" name="predictstock" placeholder="Stock Symbol, e.g. AAPL" id="inputforai"/>
+    <button class="btn waves-effect waves-light" type="submit" name="action" onclick="getPrediction();">
+        <div id="buttonname">
+            Price Prediction<i class="material-icons right">send</i>
+        </div>
+    </button>
+</form>
+<div id="outfield"></div>
+
+<script>
+    async function getPrediction(text) {
+        document.getElementById("buttonname").innerHTML = 'Loading....Please wait'
+        let finished = await fetchStatus()
+    }
+
+    function fetchStatus() {
+        let symbol = $("#inputforai").val().toUpperCase()
+
+        return new Promise((resolve, reject) => {
+            $.ajax({
+                url: "{% url 'getprediction' %}",
+                data: {
+                    'symbol': symbol
+                },
+                dataType: 'json',
+                success: function (data) {
+                    $("#buttonname").html("Predicted price: US$" + data.predicted_price.toString())
+                },
+                error: function() {
+                    $("#outfield").text("Price data not found!")
+                    $("#outfield").css("color", "red")
+                }
+            })
+        })
+
+    }
+
+</script>
+{% endblock %}

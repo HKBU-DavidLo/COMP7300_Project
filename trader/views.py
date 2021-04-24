@@ -310,34 +310,6 @@ def confirmdeposit(request):
 
 @login_required
 def withdrawcash(request):
-<<<<<<< HEAD
-    pass
-
-import subprocess 
-from subprocess import Popen, PIPE
-
-def prediction(request):
-    try:
-        
-        predictstock= request.POST.get('predictstock')
-        if predictstock == "":
-            predictstock = "AAPL"
-            return render(request, 'prediction.html')
-        else:
-            if request.method == 'POST':
-             {'predictstock': predictstock}
-             #subprocess.check_call(['python3', './prediction/ai_lstm.py',predictstock])
-             process = subprocess.run(['python3', './prediction/ai_lstm.py',predictstock], check=True, stdout=subprocess.PIPE, universal_newlines=True)
-             output = process.stdout
-             words = output.split()
-             lastpprice=(words[-1])
-         # nb lowercase 'python'
-             prediction = {'predictstock': predictstock,
-                            'lastpprice': lastpprice}
-            return render(request, 'prediction.html',prediction)
-    except subprocess.CalledProcessError:
-        print("empty symbol")
-=======
     page_title = 'Form for cash withdrawal'
     cash = float(Cash.objects.get(user=request.user))
     username = request.user
@@ -351,6 +323,32 @@ def prediction(request):
         'page_title': page_title,
     }
     return render(request, 'cash-action.html', context)
+
+import subprocess 
+from subprocess import Popen, PIPE
+
+def prediction(request):
+    try:
+        predictstock = request.POST.get('predictstock')
+        if predictstock == "":
+            predictstock = "AAPL"
+            return render(request, 'prediction.html')
+        else:
+            if request.method == 'POST':
+                {'predictstock': predictstock}
+            #subprocess.check_call(['python3', './prediction/ai_lstm.py',predictstock])
+                #process = subprocess.run(['python3', './prediction/ai_lstm.py',predictstock], check=True, stdout=subprocess.PIPE, universal_newlines=True)
+                process = subprocess.run(['python', './prediction/ai_lstm.py',predictstock], check=True, stdout=subprocess.PIPE, universal_newlines=True)
+                output = process.stdout
+                words = output.split()
+                lastpprice=(words[-1])
+         # nb lowercase 'python'
+                prediction = {'predictstock': predictstock,
+                            'lastpprice': lastpprice}
+                return render(request, 'prediction.html',prediction)
+    except subprocess.CalledProcessError:
+        print("empty symbol")
+
 
 
 @login_required
@@ -401,4 +399,41 @@ def confirmwithdraw(request):
             return HttpResponseRedirect(reverse('dashboard'))
         else:
             return render(request, 'error.html', { 'form': form })
->>>>>>> f73c158588dac4abe8ae3d32670044340c333ade
+################## TESTING
+def testai(request):
+    return render(request, 'ai.html')
+
+def getprediction(request):
+    symbol = request.GET.get('symbol', None) 
+    if symbol == "":
+        symbol = "AAPL"
+    try:
+        process = subprocess.run(['python', './prediction/ai_lstm.py', symbol], check=True, stdout=subprocess.PIPE, universal_newlines=True)
+        output = process.stdout
+        words = output.split()
+        pred_price=(words[-1])
+        return JsonResponse({ 'predicted_price': pred_price })
+    except subprocess.CalledProcessError:
+        return render(request, 'error.html')
+
+    # try:
+    #     predictstock = request.POST.get('predictstock')
+    #     if predictstock == "":
+    #         predictstock = "AAPL"
+    #         return render(request, 'prediction.html')
+    #     else:
+    #         if request.method == 'POST':
+    #             {'predictstock': predictstock}
+    #         #subprocess.check_call(['python3', './prediction/ai_lstm.py',predictstock])
+    #             #process = subprocess.run(['python3', './prediction/ai_lstm.py',predictstock], check=True, stdout=subprocess.PIPE, universal_newlines=True)
+    #             process = subprocess.run(['python', './prediction/ai_lstm.py',predictstock], check=True, stdout=subprocess.PIPE, universal_newlines=True)
+    #             output = process.stdout
+    #             words = output.split()
+    #             lastpprice=(words[-1])
+    #      # nb lowercase 'python'
+    #             prediction = {'predictstock': predictstock,
+    #                         'lastpprice': lastpprice}
+    #             return render(request, 'prediction.html',prediction)
+    # except subprocess.CalledProcessError:
+    #     print("empty symbol")
+    

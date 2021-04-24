@@ -74,8 +74,6 @@ def new_search(request):
     # models.Search.objects.create(search=search)
     return render(request, 'news/new_search.html', stuff_for_frontend)
 
-<<<<<<< HEAD
-=======
 
 def prediction(request):
     try:
@@ -99,4 +97,3 @@ def prediction(request):
             return render(request, 'news/base.html', prediction)
     except subprocess.CalledProcessError:
         print("empty symbol")
->>>>>>> f73c158588dac4abe8ae3d32670044340c333ade

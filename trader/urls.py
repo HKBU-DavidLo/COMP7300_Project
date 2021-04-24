@@ -18,9 +18,8 @@ urlpatterns = [
     path('deposit-preview/', views.depositpreview, name='deposit-preview'),
     path('withdraw-preview/', views.withdrawpreview, name='withdraw-preview'),
     path('confirm-deposit/', views.confirmdeposit, name='confirm-deposit'),
-<<<<<<< HEAD
-    path('prediction', views.prediction, name='prediction'),
-=======
+    path('prediction/', views.prediction, name='prediction'),
     path('confirm-withdraw/', views.confirmwithdraw, name='confirm-withdraw'),
->>>>>>> f73c158588dac4abe8ae3d32670044340c333ade
+    path('testai/', views.testai, name="testai"),
+    path('getprediction/', views.getprediction, name='getprediction'),
 ]

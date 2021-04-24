@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div class="container">
+    <div class="content">
+        <h2>Your Trading Dashboard</h2>
+        <h6>Cash balance: $<em>{{cash}}</em></h6>
+        <h6>Stock market value: $<em>{{total_mkt_value}}</em></h6>
+        <h4>Total account value: $<em>{{ total_acct_value }}</em></h4>
+        <h2>Your Stock Portfolio:</h2>
+        <table>
+            <thead>
+                <td>Symbol</td>
+                <td>#Shares</td>
+                <td>#Avg Purchase Price ($)</td>
+                <td>Mkt Value ($)</td>
+                <td>Profit / Loss</td>
+            </thead>
+            {% if stocks %}                     
+                {% for stock in stocks %}
+                <tr>
+                    <td>{{ stock.symbol }}</td>
+                    <td>{{ stock.quantity }}</td>
+                    <td>${{ stock.avg_purchase_price }}</td>
+                    <td>${{ stock.current }}</td>
+                    <td>${{ stock.profit_loss }}</td>
+                </tr>
+                {% endfor %}
+            {% else %}
+                <p>You do not have any stock holding.</p>
+            {% endif %}
+            <tr>
+                <td colspan="3"><strong>Total:</strong></td>
+                <td >${{total_mkt_value}}</td>
+                <td >${{total_pl}}</td>
+            </tr>
+        </table>
+    </div>
+</div>
+
+
+{% endblock %}

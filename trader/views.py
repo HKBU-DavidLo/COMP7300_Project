@@ -2,7 +2,7 @@ from django.shortcuts import render, get_object_or_404, redirect
 from django.http import HttpResponseRedirect, JsonResponse, HttpResponse
 from django.utils.timezone import now
 from django.urls import reverse
-from .forms import ShareTransactionForm, DepositCashForm
+from .forms import ShareTransactionForm, DepositCashForm, WithdrawCashForm
 from .models import Transaction, Stock, Cash, CashTX
 from django.contrib.auth import authenticate
 from django.contrib.auth.decorators import login_required
@@ -36,7 +36,7 @@ def buy(request):
     context = {
         'page_title': page_title,
         'form': form,
-        'action': 'buyorder-preview'
+        'action': 'buyorder-preview',
     }
     return render(request, 'share-order.html', context)
 
@@ -119,6 +119,7 @@ def buyorderpreview(request):
                 context = {
                     'form': form,
                     'page_title': 'Insufficient Fund',
+                    'action': 'buyorder-preview',
                     'error_msg': "You don't have enough cash, please deposit and try again!",
                 }
                 return render(request, 'share-order.html', context)
@@ -254,6 +255,7 @@ def confirmsell(request):
 
 @login_required
 def depositcash(request):
+    page_title = 'Form for depositing cash'
     cash = float(Cash.objects.get(user=request.user))
     username = request.user
     form = DepositCashForm()
@@ -261,8 +263,11 @@ def depositcash(request):
         'cash': cash,
         'username': username,
         'form': form,
+        'action': 'deposit',
+        'resource': 'deposit-preview',
+        'page_title': page_title,
     }
-    return render(request, 'inject-cash.html', context)
+    return render(request, 'cash-action.html', context)
 
 @login_required
 def depositpreview(request):
@@ -305,6 +310,7 @@ def confirmdeposit(request):
 
 @login_required
 def withdrawcash(request):
+<<<<<<< HEAD
     pass
 
 import subprocess 
@@ -331,3 +337,68 @@ def prediction(request):
             return render(request, 'prediction.html',prediction)
     except subprocess.CalledProcessError:
         print("empty symbol")
+=======
+    page_title = 'Form for cash withdrawal'
+    cash = float(Cash.objects.get(user=request.user))
+    username = request.user
+    form = WithdrawCashForm()
+    context = {
+        'cash': cash,
+        'username': username,
+        'form': form,
+        'action': 'withdraw',
+        'resource': 'withdraw-preview',
+        'page_title': page_title,
+    }
+    return render(request, 'cash-action.html', context)
+
+
+@login_required
+def withdrawpreview(request):
+    if request.method == 'POST':
+        page_title = 'Preview Your Instruction to Withdraw'
+        form = WithdrawCashForm(request.POST)
+        if form.is_valid():
+            context = {
+                'form': form,
+                'page_title': page_title, 
+            }
+            return render(request, 'withdraw-preview.html', context)     
+        else:
+            pass
+
+
+@login_required
+def confirmwithdraw(request):
+    if request.method == 'POST':
+        form = WithdrawCashForm(request.POST)
+        if form.is_valid():
+            cash = form.cleaned_data['cash']
+            cash_obj = get_object_or_404(Cash, user=request.user)
+            if cash_obj.cash < cash:
+                context = {
+                    'cash': float(Cash.objects.get(user=request.user)),
+                    'username': request.user,
+                    'form': form,
+                    'action': 'withdraw',
+                    'resource': 'withdraw-preview',
+                    'page_title': 'Error occcured',
+                    'error_msg': 'Not enough cash to withdraw, please try again!' 
+                }
+                return render(request, 'cash-action.html', context)
+            cash_before = cash_obj.cash
+            cash_obj.cash -= cash
+            cash_obj.save()
+            cashtx_object = CashTX(
+                tx_type='w',
+                cash_before=cash_before,
+                cash_after=cash_obj.cash,
+                amount=cash,
+                tx_time=cash_obj.updated,
+                user=request.user,
+            )
+            cashtx_object.save()
+            return HttpResponseRedirect(reverse('dashboard'))
+        else:
+            return render(request, 'error.html', { 'form': form })
+>>>>>>> f73c158588dac4abe8ae3d32670044340c333ade

@@ -23,3 +23,7 @@ class ShareTransactionForm(forms.Form):
 class DepositCashForm(forms.Form):
     cash = forms.FloatField(label='Amount of cash to be deposited')
     tx_time = forms.DateField(widget=forms.HiddenInput(), required=False)
+
+class WithdrawCashForm(forms.Form):
+    cash = forms.FloatField(label='Amount of cash to be withdrawn')
+    tx_time = forms.DateField(widget=forms.HiddenInput(), required=False)

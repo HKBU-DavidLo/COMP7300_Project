@@ -19,6 +19,8 @@ class ShareTransactionForm(forms.Form):
     tx_time = forms.DateField(widget=forms.HiddenInput(), required=False)
 
     ## cleasing functions to be written
+    def clean_stock(self):
+        return self.cleaned_data['stock'].upper()
 
 class DepositCashForm(forms.Form):
     cash = forms.FloatField(label='Amount of cash to be deposited')

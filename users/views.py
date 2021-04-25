@@ -13,26 +13,20 @@ from .models import Profile
 def register(request):
     if request.method == 'POST':
         form = UserRegisterForm(request.POST)
-        #profileform = ProfileForm(request.POST)
-        if form.is_valid():  # and profileform.is_valid():
+        if form.is_valid():
             form.save()
-            # profileform.save
+
             username = form.cleaned_data.get('username')
             raw_password = form.cleaned_data.get('password1')
             user = authenticate(username=username, password=raw_password)
             login(request, user)
-            #mobile = profileform.cleaned_data.get('mobile')
-            # print(mobile)
-
             messages.success(
                 request, f'Account created for {username}!')
-            # models.Profile.objects.create(mobile=form.cleaned_data.get('mobile'))
+
             return redirect('profile')
     else:
         form = UserRegisterForm()
-        #profileform = ProfileForm()
 
-    # , 'profileform': profileform})
     return render(request, 'users/register.html', {'form': form})
 
 
@@ -77,7 +71,6 @@ def verify_view(request):
         if not request.POST:
             print(code_user)
 
-            #send_sms(code_user, user.profile.mobile)
         if form.is_valid():
             num = form.cleaned_data.get('number')
 

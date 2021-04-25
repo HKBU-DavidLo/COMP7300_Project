@@ -70,6 +70,7 @@ def verify_view(request):
         code_user = f"{user.username} : {user.code}"
         if not request.POST:
             print(code_user)
+            #send_sms(code_user, user.profile.mobile)
 
         if form.is_valid():
             num = form.cleaned_data.get('number')

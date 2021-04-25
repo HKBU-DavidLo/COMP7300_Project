@@ -29,7 +29,7 @@
     <script>
         //$("#stock_sel").prop("selectedIndex", -1)
         $("#stock_sel").on("input", async function () {
-            let symbol = $("#stock_sel").val().toUpperCase()
+            let symbol = $("#stock_sel").val().toUpperCase().trim()
             if (symbol && symbol.length >= 2) {
                 $.ajax({
                     url: "{% url 'getquote' %}",
@@ -78,7 +78,7 @@
     }
 
     function fetchStatus() {
-        let symbol = $("#stock_sel").val().toUpperCase()
+        let symbol = $("#stock_sel").val().toUpperCase().trim()
 
         return new Promise((resolve, reject) => {
             $.ajax({

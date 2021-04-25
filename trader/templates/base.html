@@ -177,12 +177,12 @@ article .wrapper .footer {
     <div class="top">
         <h4>Action</h4>
         <ul>
-            <li><a href="#">Dashboard</a></li>
-            <li><a href="#">Deposit Fund</a></li>
-            <li><a href="#">Withdraw Fund</a></li>
-            <li><a href="#">Buy Stocks</a></li>
-            <li><a href="#">Sell Stocks</a></li>
-            <li><a href="#">Sign Out</a></li>
+            <li><a href="{% url 'dashboard' %}">Dashboard</a></li>
+            <li><a href="{% url 'deposit-cash' %}">Deposit Fund</a></li>
+            <li><a href="{% url 'withdraw-cash' %}">Withdraw Fund</a></li>
+            <li><a href="{% url 'buy' %}">Buy Stocks</a></li>
+            <li><a href="{% url 'sell' %}">Sell Stocks</a></li>
+            <li><a href="{% url 'logout' %}">Sign Out</a></li>
         </ul>
     </div>
   </aside>

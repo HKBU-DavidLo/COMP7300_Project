@@ -99,7 +99,8 @@
           Search
           <i class="material-icons right">send</i>
         </button>
-        <h4>Stock Prediction</h4>
+      </form>
+<!--         <h4>Stock Prediction</h4>
       </form>
 
       <form action='{% url "prediction" %}' method="POST">
@@ -125,10 +126,10 @@
             Price Prediction<i class="material-icons right">send</i>
           </div>
         </button>
-      </form>
+      </form> -->
       {% block content%} {% endblock %}
-      <p style="text-align: left"> {{ predictstock }} - Prediction Price : {{ lastpprice }} </p>
-    </form>
+      <!-- <p style="text-align: left"> {{ predictstock }} - Prediction Price : {{ lastpprice }} </p> -->
+
     <div id="result">
     </div>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>

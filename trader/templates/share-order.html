@@ -26,6 +26,11 @@
         </div>
     </button>
     <div id="outfield"></div>
+    <div id="chartdiv" style="width: 100%; height: 500px"></div>
+        <script src="https://cdn.amcharts.com/lib/4/core.js"></script>
+        <script src="https://cdn.amcharts.com/lib/4/charts.js"></script>
+        <script src="https://cdn.amcharts.com/lib/4/themes/animated.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/luxon/1.26.0/luxon.min.js"></script>
     <script>
         //$("#stock_sel").prop("selectedIndex", -1)
         $("#stock_sel").on("input", async function () {
@@ -45,6 +50,72 @@
                         $("#price").style.color = "red"
                     }
                 })
+                now_UNIX = (luxon.DateTime.now().ts / 1000).toFixed(0);
+                sixMthsAgo_Unix = (luxon.DateTime.now().minus({months: 6}).ts / 1000).toFixed(0);
+                $.ajax({
+                    url: "https://finnhub.io/api/v1/stock/candle?symbol=" + symbol +"&resolution=D&from="+  sixMthsAgo_Unix + "&to=" + now_UNIX +"&token=c0p7jnn48v6rvej4esog",
+                    data: {
+                        'symbol': symbol
+                    },
+                    dataType: 'json',
+                    success: function (data) {
+                        finChartData = [];
+                        fromDate = luxon.DateTime.now().minus({months: 6})
+                        dateCount = 0;
+
+                        for (i=0; i<data.c.length; i++){
+                           console.log(fromDate.plus({days: dateCount}).weekday)
+                            if( fromDate.plus({days: dateCount}).weekday !== 6 && fromDate.plus({days: dateCount}).weekday !== 7 ){
+                                date = fromDate.plus({days: dateCount}).toFormat('yyyy-MM-dd')
+                            } else if ( fromDate.plus({days: dateCount}).weekday === 6) {
+                                dateCount +=2
+                                date = fromDate.plus({days: dateCount}).toFormat('yyyy-MM-dd')
+                            } else if ( fromDate.plus({days: dateCount}).weekday === 7) {
+                                dateCount +=1
+                                date = fromDate.plus({days: dateCount}).toFormat('yyyy-MM-dd')
+                            }
+                            dateCount +=1
+                            finChartData.push({
+                                "date": date,
+                                "open": data.o[i],
+                                "high": data.h[i],
+                                "low": data.l[i],
+                                "close": data.c[i]
+                            })
+                        }
+                        am4core.ready(function() {
+
+                        // Themes begin
+                                am4core.useTheme(am4themes_animated);
+                        // Themes end
+                                var chart = am4core.create("chartdiv", am4charts.XYChart);
+                                chart.paddingRight = 20;
+
+                                chart.dateFormatter.inputDateFormat = "yyyy-MM-dd";
+
+                                var dateAxis = chart.xAxes.push(new am4charts.DateAxis());
+                                dateAxis.renderer.grid.template.location = 0;
+
+                                var valueAxis = chart.yAxes.push(new am4charts.ValueAxis());
+                                valueAxis.tooltip.disabled = true;
+
+                                var series = chart.series.push(new am4charts.CandlestickSeries());
+                                series.dataFields.dateX = "date";
+                                series.dataFields.valueY = "close";
+                                series.dataFields.openValueY = "open";
+                                series.dataFields.lowValueY = "low";
+                                series.dataFields.highValueY = "high";
+                                series.simplifiedProcessing = true;
+                                series.tooltipText = "Open:${openValueY.value}\nLow:${lowValueY.value}\nHigh:${highValueY.value}\nClose:${valueY.value}";
+
+                                chart.cursor = new am4charts.XYCursor();
+                                chart.data = finChartData
+                        }); 
+                    },
+                    error: function() {
+                    }
+                })
+                
             }
             // let response = await fetch("https://finnhub.io/api/v1/quote?symbol="+symbol+"&token=c0n56cv48v6v1q0c1peg")
             // if (response.ok) {
@@ -52,6 +123,7 @@
             //     $("#price").text("Real time price: US$" + data.c.toString())
             // }
             //$("#price").text(response)
+            
         })
         function validateForm() {
             let priceField = document.getElementById('price').innerHTML
@@ -98,5 +170,6 @@
         })
 
     }
+
     </script>
 {% endblock %}

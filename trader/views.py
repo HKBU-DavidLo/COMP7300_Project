@@ -130,7 +130,7 @@ def buyorderpreview(request):
 def dashboard(request):
     cash = float(Cash.objects.get(user=request.user))
     username = request.user
-    stocks = Stock.objects.filter(user=request.user)
+    stocks = Stock.objects.filter(user=request.user).exclude(long_position_after=0)
     stocks_update = []
     stock_update = {}
     total_pl = 0

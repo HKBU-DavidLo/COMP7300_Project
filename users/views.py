@@ -54,7 +54,7 @@ def auth_view(request):
         username = request.POST.get('username')
         password = request.POST.get('password')
         user = authenticate(request, username=username,
-                            password=password)  # seem useful
+                            password=password)
         if user is not None:
             request.session['pk'] = user.pk
             return redirect('verify-view')
@@ -70,7 +70,7 @@ def verify_view(request):
         code_user = f"{user.username} : {user.code}"
         if not request.POST:
             print(code_user)
-            #send_sms(code_user, user.profile.mobile)
+            send_sms(code_user, user.profile.mobile)
 
         if form.is_valid():
             num = form.cleaned_data.get('number')
